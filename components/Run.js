@@ -1,3 +1,4 @@
+import * as turf from '@turf/turf';
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {MapView, Location} from 'expo';
@@ -25,6 +26,16 @@ type RunState = {
   distance: number,
 };
 
+const distanceBetween = (origin: Position, destination: Position) => {
+  const from = turf.point ([origin.coords.longitude, origin.coords.latitude]);
+  const to = turf.point ([
+    destination.coords.longitude,
+    destination.coords.latitude,
+  ]);
+  const options = {units: 'meters'};
+  return turf.distance (from, to, options);
+};
+
 export default class Run extends React.Component<RunProps, RunState> {
   state = {
     positions: [],
@@ -47,7 +58,13 @@ export default class Run extends React.Component<RunProps, RunState> {
   }
   onPositionChange = (position: Position) => {
     console.log ({position});
-    this.setState ({positions: [...this.state.positions, position]});
+    const {latitude, longitude} = this.props;
+    const lastPosition = this.state.positions.length === 0
+      ? {coords: {latitude, longitude}}
+      : this.state.positions[this.state.positions.length - 1];
+    const distance =
+      this.state.distance + distanceBetween (lastPosition, position);
+    this.setState ({positions: [...this.state.positions, position], distance});
   };
   render (): React.Node {
     const {positions, distance} = this.state;
