@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {MapView, Location} from 'expo';
+import Monitor from './Monitor';
 
 const {Marker, Polyline} = MapView;
 
@@ -21,11 +22,13 @@ type RunProps = {
 
 type RunState = {
   positions: Position[],
+  distance: number,
 };
 
 export default class Run extends React.Component<RunProps, RunState> {
   state = {
     positions: [],
+    distance: 0,
   };
   async componentDidMount () {
     const options = {
@@ -47,13 +50,14 @@ export default class Run extends React.Component<RunProps, RunState> {
     this.setState ({positions: [...this.state.positions, position]});
   };
   render (): React.Node {
-    const {positions} = this.state;
+    const {positions, distance} = this.state;
     const {latitude, longitude} = this.props;
     const currentPosition = positions.length === 0
       ? {coords: {latitude, longitude}}
       : positions[[positions.length - 1]];
     return (
       <View style={styles.container}>
+        <Monitor {...{distance}} />
         <MapView
           provider="google"
           initialRegion={{
