@@ -8,7 +8,7 @@ export default class App extends React.Component {
     if (status === 'granted') {
       const {
         coords: {latitude, longitude},
-      } = Location.getCurrentPositionAsync ();
+      } = await Location.getCurrentPositionAsync ();
     } else {
       alert ("Couldn't get your location");
     }
