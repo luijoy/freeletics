@@ -4,7 +4,9 @@ import * as turf from '@turf/turf';
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {MapView, Location} from 'expo';
+
 import Monitor from './Monitor';
+import Pin from './Pin';
 
 const {Marker, Polyline} = MapView;
 
@@ -109,7 +111,9 @@ export default class Run extends React.Component<RunProps, RunState> {
           }}
           style={styles.map}
         >
-          <Marker coordinate={currentPosition.coords} />
+          <Marker coordinate={currentPosition.coords}>
+            <Pin />
+          </Marker>
           <Polyline
             coordinates={positions.map (position => position.coords)}
             strokeWidth={10}
