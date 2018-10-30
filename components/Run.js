@@ -50,11 +50,21 @@ export default class Run extends React.Component<RunProps, RunState> {
     const {positions} = this.state;
     const {latitude, longitude} = this.props;
     const currentPosition = positions.length === 0
-      ? {latitude, longitude}
+      ? {coords: {latitude, longitude}}
       : positions[[positions.length - 1]];
     return (
       <View style={styles.container}>
-        <MapView provider="google" style={styles.map}>
+        <MapView
+          provider="google"
+          initialRegion={{
+            latitude,
+            longitude,
+            latitudeDelta: 0.001,
+            longitudeDelta: 0.01,
+          }}
+          style={styles.map}
+        >
+          <Marker coordinate={currentPosition.coords} />
           <Polyline
             coordinates={positions.map (position => position.coords)}
             strokeWidth={10}
