@@ -2,6 +2,8 @@ import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {MapView, Location} from 'expo';
 
+const {Marker, Polyline} = MapView;
+
 type Position = {
   timestamp: number,
   coords: {
@@ -46,10 +48,19 @@ export default class Run extends React.Component<RunProps, RunState> {
   };
   render (): React.Node {
     const {positions} = this.state;
-    const currentPosition = positions;
+    const {latitude, longitude} = this.props;
+    const currentPosition = positions.length === 0
+      ? {latitude, longitude}
+      : positions[[positions.length - 1]];
     return (
       <View style={styles.container}>
-        <MapView provider="google" style={styles.map} />
+        <MapView provider="google" style={styles.map}>
+          <Polyline
+            coordinates={positions.map (position => position.coords)}
+            strokeWidth={10}
+            strokeColor="F2b659"
+          />
+        </MapView>
       </View>
     );
   }
