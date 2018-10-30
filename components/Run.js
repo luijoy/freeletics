@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import * as turf from '@turf/turf';
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
@@ -33,7 +34,7 @@ const distanceBetween = (origin: Position, destination: Position) => {
     destination.coords.latitude,
   ]);
   const options = {units: 'meters'};
-  return turf.distance (from, to, options);
+  return _.round (turf.distance (from, to, options));
 };
 
 export default class Run extends React.Component<RunProps, RunState> {
