@@ -2,6 +2,7 @@ import moment from 'moment';
 import * as React from 'react';
 import {StyleSheet, SafeAreaView, View, Text} from 'react-native';
 import {Feather as Icon} from '@expo/vector-icons';
+import {center} from '@turf/turf';
 
 type MonitorProps = {
   distance: number,

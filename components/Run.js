@@ -1,9 +1,9 @@
 import moment from 'moment';
 import * as _ from 'lodash';
-import * as turf from '@turf/turf';
 import * as React from 'react';
 import {StyleSheet, View} from 'react-native';
 import {MapView, Location} from 'expo';
+import * as turf from '@turf/turf';
 
 import Monitor from './Monitor';
 import Pin from './Pin';
@@ -111,7 +111,7 @@ export default class Run extends React.Component<RunProps, RunState> {
           }}
           style={styles.map}
         >
-          <Marker coordinate={currentPosition.coords}>
+          <Marker coordinate={currentPosition.coords} anchor={{x: 0.5, y: 0.5}}>
             <Pin />
           </Marker>
           <Polyline
