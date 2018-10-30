@@ -68,7 +68,7 @@ export default class Run extends React.Component<RunProps, RunState> {
           <Polyline
             coordinates={positions.map (position => position.coords)}
             strokeWidth={10}
-            strokeColor="F2b659"
+            strokeColor="#f2b659"
           />
         </MapView>
       </View>
