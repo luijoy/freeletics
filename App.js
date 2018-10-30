@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, ActivityIndicator, View} from 'react-native';
+import {StyleSheet, ActivityIndicator, View, StatusBar} from 'react-native';
 import {Constants, Location, Permissions} from 'expo';
 
 import Run from './components/Run';
@@ -29,14 +29,16 @@ export default class App extends React.Component<{}, AppState> {
 
   render () {
     const {ready, latitude, longitude} = this.state;
-    if (!ready) {
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator size="large" color="white" />
-        </View>
-      );
-    }
-    return <Run distance={200} {...{latitude, longitude}} />;
+    return (
+      <React.Fragment>
+        <StatusBar barStyle="light-content" />
+        {ready && <Run distance={200} {...{latitude, longitude}} />}
+        {!ready &&
+          <View style={styles.container}>
+            <ActivityIndicator size="large" color="white" />
+          </View>}
+      </React.Fragment>
+    );
   }
 }
 

@@ -25,6 +25,7 @@ type RunProps = {
 type RunState = {
   positions: Position[],
   distance: number,
+  pace: number,
 };
 
 const distanceBetween = (origin: Position, destination: Position) => {
@@ -37,7 +38,19 @@ const distanceBetween = (origin: Position, destination: Position) => {
   return _.round (turf.distance (from, to, options));
 };
 
+const computePace = (
+  delta: number,
+  previousPosition: Position,
+  position: Position
+) => {
+  const time = position.timestamp - previousPosition.timestamp;
+  const pace = time / delta;
+  return pace;
+};
+
 export default class Run extends React.Component<RunProps, RunState> {
+  map = React.createRef ();
+
   state = {
     positions: [],
     distance: 0,
@@ -58,25 +71,32 @@ export default class Run extends React.Component<RunProps, RunState> {
     this.listener.remove ();
   }
   onPositionChange = (position: Position) => {
+    this.map.current.animateToCoordinate (position.coords, 1000);
     console.log ({position});
     const {latitude, longitude} = this.props;
     const lastPosition = this.state.positions.length === 0
       ? {coords: {latitude, longitude}}
       : this.state.positions[this.state.positions.length - 1];
-    const distance =
-      this.state.distance + distanceBetween (lastPosition, position);
-    this.setState ({positions: [...this.state.positions, position], distance});
+    const delta = distanceBetween (lastPosition, position);
+    const distance = this.state.distance + delta;
+    const pace = computePace (delta, lastPosition, position);
+    this.setState ({
+      positions: [...this.state.positions, position],
+      distance,
+      pace,
+    });
   };
   render (): React.Node {
-    const {positions, distance} = this.state;
+    const {positions, distance, pace} = this.state;
     const {latitude, longitude} = this.props;
     const currentPosition = positions.length === 0
       ? {coords: {latitude, longitude}}
       : positions[[positions.length - 1]];
     return (
       <View style={styles.container}>
-        <Monitor {...{distance}} />
+        <Monitor {...{distance, pace}} />
         <MapView
+          ref={this.map}
           provider="google"
           initialRegion={{
             latitude,

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import * as React from 'react';
 import {StyleSheet, SafeAreaView, View, Text} from 'react-native';
 import {Feather as Icon} from '@expo/vector-icons';
@@ -11,6 +12,11 @@ type MonitorState = {
   duration: number,
 };
 
+const formatDuration = (duration: number) =>
+  moment
+    .utc (moment.duration (duration, 's').asMilliseconds ())
+    .format ('mm:ss');
+
 export default class Monitor
   extends React.Component<MonitorProps, MonitorState> {
   state = {
@@ -18,7 +24,7 @@ export default class Monitor
   };
   componentDidMount () {
     this.interval = setInterval (
-      this.setState ({duration: this.state.duration + 1}),
+      () => this.setState ({duration: this.state.duration + 1}),
       1000
     );
   }
@@ -33,13 +39,13 @@ export default class Monitor
       <SafeAreaView style={styles.container}>
         <Text style={{fontSize: 72, color: 'white'}}>{distance}</Text>
         <View style={styles.row}>
-          <View>
-            <Icon name="watch" />
-            <Text>{pace}</Text>
+          <View style={styles.row}>
+            <Icon name="watch" color="white" size={28} />
+            <Text style={styles.label}>{formatDuration (pace)}</Text>
           </View>
-          <View>
-            <Icon name="clock" />
-            <Text>{duration}</Text>
+          <View style={styles.row}>
+            <Icon name="clock" color="white" size={28} />
+            <Text style={styles.label}>{formatDuration (duration)}</Text>
           </View>
         </View>
       </SafeAreaView>
