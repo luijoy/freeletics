@@ -1,3 +1,4 @@
+import moment from 'moment';
 import * as _ from 'lodash';
 import * as turf from '@turf/turf';
 import * as React from 'react';
@@ -27,6 +28,8 @@ type RunState = {
   distance: number,
   pace: number,
 };
+
+const timestamp = moment ().valueOf ();
 
 const distanceBetween = (origin: Position, destination: Position) => {
   const from = turf.point ([origin.coords.longitude, origin.coords.latitude]);
@@ -75,11 +78,11 @@ export default class Run extends React.Component<RunProps, RunState> {
     console.log ({position});
     const {latitude, longitude} = this.props;
     const lastPosition = this.state.positions.length === 0
-      ? {coords: {latitude, longitude}}
+      ? {coords: {latitude, longitude}, timestamp}
       : this.state.positions[this.state.positions.length - 1];
     const delta = distanceBetween (lastPosition, position);
     const distance = this.state.distance + delta;
-    const pace = computePace (delta, lastPosition, position);
+    const pace = delta > 0 ? computePace (delta, lastPosition, position) : 0;
     this.setState ({
       positions: [...this.state.positions, position],
       distance,

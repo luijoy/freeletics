@@ -38,7 +38,7 @@ export default class Monitor
     return (
       <SafeAreaView style={styles.container}>
         <Text style={{fontSize: 72, color: 'white'}}>{distance}</Text>
-        <View style={styles.row}>
+        <View style={styles.rows}>
           <View style={styles.row}>
             <Icon name="watch" color="white" size={28} />
             <Text style={styles.label}>{formatDuration (pace)}</Text>
@@ -55,7 +55,14 @@ export default class Monitor
 
 const styles = StyleSheet.create ({
   container: {
-    height: 300,
     backgroundColor: '#29252b',
+  },
+  label: {
+    color: 'white',
+  },
+  rows: {
+    flexDirection: 'row',
+    justifyContent: 'space-evenly',
+    height: 64,
   },
 });
