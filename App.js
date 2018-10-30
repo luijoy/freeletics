@@ -17,7 +17,7 @@ export default class App extends React.Component<{}, AppState> {
 
   async componentDidMount () {
     const {status} = await Permissions.askAsync (Permissions.LOCATION);
-    if (status === 'grante') {
+    if (status === 'granted') {
       const {
         coords: {latitude, longitude},
       } = await Location.getCurrentPositionAsync ();
